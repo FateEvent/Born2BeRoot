@@ -1,3 +1,5 @@
+# Born2BeRoot, or creating and configuring a virtual machine with VirtualBox
+
 ## STEP 1 - VM settings
 
 You can't create your virtual disk in your user folder.
@@ -348,6 +350,5 @@ Now all you need to do is to prepare for the evaluation. Don't forget to check t
 
 #### useful commands:
 `ip a` to find the ip address of your machine
-
 
 I thank HEADLIGHTER <https://github.com/HEADLIGHTER/Born2BeRoot-42> and GuillaumeOz <https://github.com/GuillaumeOz/Born2beroot> to the work of whom this walkthrough is freely inspired.
