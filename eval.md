@@ -21,7 +21,7 @@ Virtualization allow us to share a system with multiple virtual environments. Th
 * costs are reduced since the physical architecture is reduced;
 * VMs are easy to implement because they provide mechanisms to clone themselves into another physical device.
 
-### A snapshot
+#### A snapshot
 
 A snapshot is a state of a virtual machine at an exact point in time. It allows users to restore a virtual machine's state at the time of the snapshot, effectively undoing any changes that occurred afterwards. This capability is useful as a backup technique, for example, prior to performing a risky operation.
 
@@ -31,27 +31,32 @@ Other components of a virtual machine can also be included in a snapshot, such a
 
 Restoring a snapshot consists of discarding or disregarding all overlay layers that are added after that snapshot, and directing all new changes to a new overlay.
 
-### What is AppArmor?
+A clone, on the other hand, creates a copy of the running machine. It is used to recreate a machine which is configured as the previous one, of which it is a sort of child.
+The IP address will be therefore slightly different, since there can't be two machines sharing the same IP address.
+
+### What is the difference between AppArmor and SELinux?
 
 AppArmor ("Application Armor") is a Linux kernel security module that allows the system administrator to restrict programs' capabilities with tailor-made, per-program profiles. Profiles can allow capabilities like network access, raw socket access, and the permission to read, write, or execute files on matching paths. It's what is called mandatory access control (MAC), a type of access control by which the operating system or database constrains the ability of a subject, a process, for example, to access or generally perform some sort of operation on an object, a file, a directory, a TCP/UDP port, etc. Subjects and objects each have a set of security attributes. Whenever a subject tries to accede to an object, their attributes are examined.
 It exists, however, two ways in which profiles may work, a "complaint mode" and an "enforce mode". In the last case, the processes are restrained from performing restricted tasks, while in the first one, AppArmor allows applications to do these tasks, but creates a registry entry to display the complaint.
 AppArmor is partly offered as an alternative to SELinux, which critics consider difficult for administrators to set up and maintain. Unlike SELinux, which is based on applying labels to files, AppArmor works with file paths.
 
-### What is SELinux?
+SELinux (Security-Enhanced Linux) is a security architecture for Linux systems that allows administrators to better control access to the system. This architecture was originally designed by the NSA, the national security agency of the United States, as a series of fixes for the Linux kernel based on the LSM (Linux Security Modules) framework. 
 
-SELinux (Security-Enhanced Linux) is a security architecture for Linux systems that allows administrators to better control access to the system. This architecture was originally designed by the NSA, the national security agency of the United States, as a series of fixes for the Linux kernel based on the LSM (Linux Security Modules) framework.
+While AppArmor uses path based control, making the system transparent, SELinux' rule sets are complex, but they enable more control over the isolation of processes. It is, however, very difficult to independently verify how these rules are applied.
 
 ### What is the difference between Apt and Aptitude?
 
-In Debian-based OS distributions, the default package manager is dpkg. This tool allows us to install, remove and manage programs on our operating system. However, in most cases, these programs come with a list of dependencies that must be installed for the main program to function properly, and we have to install them manually. However, APT (Advanced Package Tool) may install all the necessary dependencies when installing a program. A single command thus allows us to install a software and all its packages.
+In Debian-based OS distributions, the default package manager is dpkg (Debian package). This tool allows us to install, remove and manage programs on our operating system. However, in most cases, these programs come with a list of dependencies that must be installed for the main program to function properly, and we have to install them manually. However, APT (Advanced Package Tool) may install all the necessary dependencies when installing a program. A single command thus allows us to install a software and all its packages.
 In case we wanted to use a graphical interface, however, we would have to use Aptitude, the text-based front-end for the APT package management system. It allows the user to view the list of packages and to perform package management tasks such as installing, upgrading, and removing packages either from a visual interface or from the command-line.
+It is a high-level package manager, contrarily to Apt, which is a low-level one, so commands are more automatized. For example, Aptitude handles more stuff than apt, including functionalities of apt-mark and apt-cache like searching for a package in a list of installed packages, marking a package to be automatically or manually installed, holding a package making it unavailable for up-gradation and so on.
 
 ### What's SSH?
 
 SSH or Secure Shell is a remote administration protocol that allows users to control and modify their servers over the Internet thanks to an authentication mechanism. It provides a mechanism to authenticate a user remotely, transfer data from a client to a host, and return a response to the request made by the client.
 SSH was created as an alternative to Telnet, which does not encrypt the transmissions. SSH, on the contrary, makes sure that all communications are encrypted.
 To connect to a Linux terminal from a MacOS terminal via an SSH connection type:
-`ssh {username}@{IP_host} -p {port}`
+
+    ssh {username}@{IP_host} -p {port}
 
 SSH uses three techniques to encrypt:
 
@@ -61,7 +66,7 @@ SSH uses three techniques to encrypt:
 
 ### How to implement UFW with SSH
 
-UFW (Uncomplicated Firewall) is a software application responsible for ensuring that the system administrator can manage iptables in a simple way. Since it is very difficult to work with iptables, UFW provides us with an interface to modify the firewall of our device (netfilter) without compromising security. Once we have UFW installed, we can choose which ports we want to allow connections, and which ports we want to close. This will also be very useful with SSH, greatly improving all security related to communications between devices.
+UFW (Uncomplicated Firewall) is a software application responsible for ensuring that the system administrator can manage iptables in a simple way. Since it is very difficult to work with iptables, UFW provides us with an interface to modify the firewall of our device (netfilter) without compromising security. Once we have UFW installed, we can choose which ports we want to open for connections and which ones we want to close. This will also be very useful with SSH, greatly improving all the security related to communications between devices.
 
 ### Cron, wall and the useless thing
 
@@ -72,6 +77,23 @@ Cron is a Linux task manager allowing us to execute commands at a certain time. 
 #### The wall command
 
 The `wall` command used by the root user to send a message to all users currently connected to the server. If the system administrator wishes to alert about a major server change, the root user could alert them with this command.
+
+### CentOS and Debian
+
+CentOS and Debian are two distributions of Linux.
+CentOS is free and open-source, and it's appreciated by industries, which often use it for server building. It is supported by a large community and is functionally supported by its upstream source, Red Hat Enterprise Linux. Debian is a Unix-like computer operating system that is made up of open source components and is built and supported by a group of individuals rallied under the Debian flag.
+
+Debian uses Linux as its Kernel. Fedora, CentOS, Oracle Linux are all different distributions from Red Hat Linux and are its variants. Distributions such Ubuntu and Kali are variants of Debian.
+CentOS and Debian both are used as internet servers or web servers like web, email, FTP, etc.
+
+| CentOS | Debian |
+| ------ | ------ |
+| CentOS is more stable and supported by a large community. | Debian has less market preference. |
+| Mission-critical servers are hosted on CentOS. | Ubuntu is fast catching up. |
+| CentOS does not support many different architectures. | Debian has more packages. |
+| After a major release, the CentOS code is frozen and is never changed except for security flaws or security bugs. This makes some issues while working with it as the next update usually happens after 5 years, and many application software changes in this duration. For example, CentOS 5 supports MySQL 5.1 only, whereas there are newer versions of MySQL available, which CentOS does not support. | Due to rapid development and short testing cycle, most major vendors still prefer CentOS over Debian. For example, Oracle or MySQL team prefer CentOS because these are more stable and thoroughly tested. Most of the developers who build application software on Linux uses Ubuntu as the desktop and still uses CentOS as servers. |
+| It does not have an easy GUI (Graphic User Interface). | It has desktop friendly applications and GUI. |
+| The core software of CentOS, the kernel and all its utilities, come from the distribution, while the add-on softwares like Apache, PHP, Java, and MySQL come from newer sources such as Fedora or directly from vendors such as MySQL. | Debian provides unique functionalities which are necessary for a system. Apt repositories in package managers have the latest source code for several open-source languages and frameworks like ruby, rails, PostgreSQL, Golang, selenium, angular2-dart, etc. |
 
 ## Groups
 
@@ -91,12 +113,17 @@ Check all the local users:
     $ cut -d: -f1 /etc/passwd
 
 Create the user:
-`$ sudo adduser <your_username>`
+
+    $ sudo adduser <username>
+
+Verify whether user was successfully created:
+
+    $ getent passwd <username>
 
 Assign a user into the “evaluating” group:
 
-    $ sudo usermod -aG user42 <your_username>
-    $ sudo usermod -aG evaluating <your_username>
+    $ sudo usermod -aG user42 <username>
+    $ sudo usermod -aG evaluating <username>
 
 Check if the user is in a group:
 
@@ -118,7 +145,7 @@ To delete a group:
 
 To check if password rules apply to a username:
 
-    $ chage -l <username>
+    $ sudo chage -l <username>
 
 ## Changing a hostname
 
@@ -159,6 +186,7 @@ Remember to take a snapshot of your machine to use during the evaluation, so tha
 * Wikipedia, <https://en.wikipedia.org/wiki/Virtualization>;
 * Ayoub01, <https://github.com/ayoub0x1/born2beroot>;
 * Computer Hope, <https://www.computerhope.com/unix/aptitude.htm>;
+* EducBa, <https://www.educba.com/centos-vs-debian>;
 * AskUbuntu, <https://askubuntu.com/questions/187888/what-is-the-correct-way-to-completely-remove-an-application>;
 * GuillaumeOz, <https://github.com/GuillaumeOz/Born2beroot>;
 * Baigalaa, <https://baigal.medium.com/born2beroot-e6e26dfb50ac>.

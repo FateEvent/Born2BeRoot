@@ -383,7 +383,7 @@ For a tutorial for configuring Icecast, please refer to the official documentati
 
 ## Conclusion
 
-!IMPORTANT: Don't forget to make a clone or a snapshot of your VM before the evaluation starts!
+!IMPORTANT: Don't forget to make a snapshot of your VM (actually a simple copy-paste action on the .vdi file may be sufficient) before the evaluation starts!
 
 Now all you need to do is to prepare for the evaluation. You may find some information in my eval.md file.
 
