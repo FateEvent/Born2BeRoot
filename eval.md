@@ -56,7 +56,7 @@ SSH or Secure Shell is a remote administration protocol that allows users to con
 SSH was created as an alternative to Telnet, which does not encrypt the transmissions. SSH, on the contrary, makes sure that all communications are encrypted.
 To connect to a Linux terminal from a MacOS terminal via an SSH connection type:
 
-    ssh {username}@{IP_host} -p {port}
+	ssh {username}@{IP_host} -p {port}
 
 SSH uses three techniques to encrypt:
 
@@ -95,89 +95,105 @@ CentOS and Debian both are used as internet servers or web servers like web, ema
 | It does not have an easy GUI (Graphic User Interface). | It has desktop friendly applications and GUI. |
 | The core software of CentOS, the kernel and all its utilities, come from the distribution, while the add-on softwares like Apache, PHP, Java, and MySQL come from newer sources such as Fedora or directly from vendors such as MySQL. | Debian provides unique functionalities which are necessary for a system. Apt repositories in package managers have the latest source code for several open-source languages and frameworks like ruby, rails, PostgreSQL, Golang, selenium, angular2-dart, etc. |
 
-## Groups
+## Verify the status of UFW and SSH
 
-### Create a group
+	$ sudo ufw status
+	$ sudo service ssh status
 
-    $ sudo groupadd user42
-    $ sudo groupadd evaluating
+or
 
-Check if group created:
+	$ sudo systemctl status ufw
+	$ sudo systemctl status sshd
 
-    $ getent group
+## check the OS
 
-### Create a user and assign them into group
+	$ dpkg --version
+
+## Users and groups
+
+### Create a user
 
 Check all the local users:
 
-    $ cut -d: -f1 /etc/passwd
+	$ cut -d: -f1 /etc/passwd
 
 Create the user:
 
-    $ sudo adduser <username>
+	$ sudo adduser <username>
 
 Verify whether user was successfully created:
 
-    $ getent passwd <username>
+	$ getent passwd <username>
+
+### Create a group
+
+	$ sudo groupadd user42
+	$ sudo groupadd evaluating
+
+Check if group created:
+
+	$ getent group
+
+### Assign the user to group
 
 Assign a user into the “evaluating” group:
 
-    $ sudo usermod -aG user42 <username>
-    $ sudo usermod -aG evaluating <username>
+	$ sudo usermod -aG user42 <username>
+	$ sudo usermod -aG evaluating <username>
 
 Check if the user is in a group:
 
-    $ getent group user42
-    $ getent group evaluating
+	$ getent group user42
+	$ getent group evaluating
 
 Check to which groups a user account belongs:
 `$ groups <username>` -> To check to which groups an user account belongs
 
 To delete a user from a group:
 
-    $ sudo deluser <username> <group_name>
+	$ sudo deluser <username> <group_name>
 
 To delete a group:
 
-    $ sudo groupdel <group_name>
+	$ sudo groupdel <group_name>
 
 ## Password rules
 
 To check if password rules apply to a username:
 
-    $ sudo chage -l <username>
+	$ sudo chage -l <username>
 
 ## Changing a hostname
 
 Check the current hostname:
 
-    $ hostnamectl
+	$ hostnamectl
 
 You can change it directly on the command line:
 
-    $ hostnamectl set-hostname <new_hostname>
+	$ hostnamectl set-hostname <new_hostname>
 
 or modify the /etc/hosts file:
 
-    $ sudo nano /etc/hosts
+	$ sudo nano /etc/hosts
 
 and replace the <old_hostname> with the <new_hostname>:
 
-    127.0.0.1       localhost
-    127.0.0.1       new_hostname
+	127.0.0.1       localhost
+	127.0.0.1       new_hostname
 
 Reboot to actualize the change:
 
-    $ sudo reboot
+	$ sudo reboot
 
 ## Deleting a ufw rule
 
-    $ sudo ufw status <number>
-    $ sudo ufw delete <number>
+	$ sudo ufw status <number>
+	$ sudo ufw delete <number>
 
 ## Getting the signature file of your machine (for MacOS users)
 
-    shasum <name_of_your_machine.vdi>
+	shasum <name_of_your_machine.vdi>
 
 Type the command in the MacOS terminal and then copy and paste the code you get on a file called signature.txt that you will put at the root of your repository.
 Remember to take a snapshot of your machine to use during the evaluation, so that you will be able to use the precited command on your machine to demonstrate you didn't modify it before the examination.
