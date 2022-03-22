@@ -79,11 +79,11 @@ Now we are going to install the necessary softwares and configure them.
 
 You may here choose to install the text editor of yoour choice. I personally chose Nano, but you may choose Vim if you prefer.
 
-    $ apt-get install vim
+	$ apt-get install vim
 
 or
 
-    $ apt-get install nano
+	$ apt-get install nano
 
 ### Substep 3.1 - Installing sudo and adding user in groups
 
@@ -124,29 +124,37 @@ The firewall should be active with the ports 4242 and 4242(v6) allowed (from any
 
 Open the file `sudoers`:
 
-    $ sudo nano /etc/sudoers
+	$ sudo nano /etc/sudoers
+
+or
+
+	$ sudo visudo
+
+Add the following line in the file:
+
+	your_username    ALL=(ALL) ALL
 
 For authentication, the use of the sudo command has to be limited to 3 attempts in the event of an incorrect password:
 
-    Defaults    passwd_tries=3
+	Defaults    passwd_tries=3
 
 Add a wrong password warning message:
 
-    Defaults   badpass_message="Password is wrong, please try again!"
+	Defaults   badpass_message="Password is wrong, please try again!"
 
 Each action log file has to be saved in the /var/log/sudo/ folder. If there is no “/var/log/sudo” folder, create the sudo folder inside of “/var/log”:
 
-    Defaults	logfile="/var/log/sudo/sudo.log"
-    Defaults	log_input,log_output
+	Defaults	logfile="/var/log/sudo/sudo.log"
+	Defaults	log_input,log_output
 
 Set tty as required.
 Why using tty? If some non-root code is exploited (a PHP script, for example), the `requiretty` option makes sure that the exploited code won't be able to directly upgrade its privileges by running sudo.
 
-    Defaults   requiretty
+	Defaults   requiretty
 
 For security reasons too, the paths that can be used by sudo must be restricted. As, for instance: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 
-    Defaults   secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+	Defaults   secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 (It was already the case)
 
 ### Substep 3.5 - Setting up a strong password policy
@@ -154,8 +162,8 @@ For security reasons too, the paths that can be used by sudo must be restricted.
 1) `$ sudo nano /etc/login.defs`
 2) replace the following lines like shown above:
 
-    `PASS_MAX_DAYS 99999`  -> `PASS_MAX_DAYS    30`
-    `PASS_MIN_DAYS 0`      -> `PASS_MIN_DAYS    2`
+	`PASS_MAX_DAYS 99999`  -> `PASS_MAX_DAYS    30`
+	`PASS_MIN_DAYS 0`      -> `PASS_MIN_DAYS    2`
 
 `PASS_WARN_AGE` is set to 7 by default.
 
@@ -163,11 +171,11 @@ For security reasons too, the paths that can be used by sudo must be restricted.
 4) `$ sudo nano /etc/pam.d/common-password`
 5) At the end of the line: `"password requisite pam_pwquality.so retry=3` add the following parameters:
 
-        minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
+		minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
 
-    Your line should look as follows:
+	Your line should look as follows:
 
-        password requisite pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
+		password requisite pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
 
 6) Now you have to change all your passwords according to your new password policy:
 
@@ -184,8 +192,8 @@ VirtualBox. There's a way to fix it!
 3) Network -> Adapter 1 -> Advanced -> Port forwarding
 4)Add new rule (little green button on right top side) and next parameters:
 
-        Protocol       Host IP       Host Port       Guest IP       Guest Port
-        TCP            127.0.0.1     4242            10.0.2.15      4242
+		Protocol       Host IP       Host Port       Guest IP       Guest Port
+		TCP            127.0.0.1     4242            10.0.2.15      4242
 
 6) In your host (physical) machine open Terminal and run
 [ssh <vmusername>@localhost -p 4242]
@@ -196,132 +204,141 @@ Now you can control your virtual machine from the host terminal.
 
 ### Substep 5.1: Installing git
 
-    $ apt-get update -y
-    $ apt-get upgrade -y
-    $ apt-get install git -y
+	$ apt-get update -y
+	$ apt-get upgrade -y
+	$ apt-get install git -y
 
 Check git version:
 
-    $ git --version
+	$ git --version
 
 ### Substep 5.2: Installing wget
 
 wget is a free and open source tool for downloading files directly from web repositories.
 
-    $ sudo apt-get install wget
+	$ sudo apt-get install wget
 
 ## STEP 6 - Configuring Cron Jobs
 
-You need to configure cron as root by executing the following line:
+All you need to do now, is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh.
+To find some of the information you need, it is necessary for you to install net-tools.
 
-    sudo crontab -u root -e
+	$ sudo apt install net-tools
+
+Let's now configure crontab.
+To add the rule allowing the script to execute without sudo password, open the sudoers file:
+
+	$ sudo visudo
+
+and add the following line under the line starting with `%sudo`:
+
+	your_username ALL=(root) NOPASSWD: /path/to/monitoring.sh
+
+You need to configure Cron as root by executing the following line:
+
+	sudo crontab -u root -e
 
 To schedule a shell script to run every 10 minutes, add the following line at the end of the file:
 
-    */10 * * * * /path/to/monitoring.sh
+	*/10 * * * * /path/to/monitoring.sh
 
 Note: you can add the `wall` command to the cron, as in the following example, or directly on the script, as I did:
 
-    */10 * * * * /path/to/monitoring.sh | wall
+	*/10 * * * * /path/to/monitoring.sh | wall
 
 You may check root's scheduled cron jobs with the following line:
 
-    $ sudo crontab -u root -l
-
-Now all that you need to do is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh.
-To find some of the information you need, it is necessary for you to install net-tools.
-
-    $ sudo apt install net-tools
+	$ sudo crontab -u root -l
 
 ## Step 7 - Installing Lighttpd, MariaDB, PHP and WordPress
 
 ### Substep 7.1 - Installing Lighttpd
 
-    $ sudo apt install lighttpd
+	$ sudo apt install lighttpd
 
 To verify whether lighttpd has been successfully installed:
 
-    $ dpkg -l | grep lighttpd
+	$ dpkg -l | grep lighttpd
 
 Now let's allow incoming connections using Port 80:
 
-    $ sudo ufw allow 80
+	$ sudo ufw allow 80
 
 ### Substep 7.2: Installing and Configuring MariaDB
 
 To install mariadb-server:
 
-    $ sudo apt install mariadb-server
+	$ sudo apt install mariadb-server
 
 To verify whether mariadb-server has been successfully installed:
 
-    $ dpkg -l | grep mariadb-server
+	$ dpkg -l | grep mariadb-server
 
 Start the interactive script to remove insecure default settings:
 
-    $ sudo mysql_secure_installation
+	$ sudo mysql_secure_installation
 
-    Enter current password for root (enter for none): #Just press Enter (do not confuse database root with system root)
-    Set root password? [Y/n] n
-    Remove anonymous users? [Y/n] Y
-    Disallow root login remotely? [Y/n] Y
-    Remove test database and access to it? [Y/n] Y
-    Reload privilege tables now? [Y/n] Y
+	Enter current password for root (enter for none): #Just press Enter (do not confuse database root with system root)
+	Set root password? [Y/n] n
+	Remove anonymous users? [Y/n] Y
+	Disallow root login remotely? [Y/n] Y
+	Remove test database and access to it? [Y/n] Y
+	Reload privilege tables now? [Y/n] Y
 
 Now, log in to the MariaDB console.
 
-    $ sudo mariadb
+	$ sudo mariadb
 
 Your log will appear as follows:
 
-    MariaDB [(none)]>
+	MariaDB [(none)]>
 
 Create a new database:
 
-    MariaDB [(none)]> CREATE DATABASE <database-name>;
+	MariaDB [(none)]> CREATE DATABASE <database-name>;
 
 Create a new database user and grant them full privileges on the newly-created database:
 
-    MariaDB [(none)]> GRANT ALL ON <database-name>.* TO '<username-2>'@'localhost' IDENTIFIED BY '<password-2>' WITH GRANT OPTION;
+	MariaDB [(none)]> GRANT ALL ON <database-name>.* TO '<username-2>'@'localhost' IDENTIFIED BY '<password-2>' WITH GRANT OPTION;
 
 Flush the privileges:
 
-    MariaDB [(none)]> FLUSH PRIVILEGES;
+	MariaDB [(none)]> FLUSH PRIVILEGES;
 
 Exit the MariaDB shell:
 
-    MariaDB [(none)]> exit
+	MariaDB [(none)]> exit
 
 Verify whether the database user has been successfully created by logging in to the MariaDB console.
 
-    $ mariadb -u <username-2> -p
-    Enter password: <password-2>
-    MariaDB [(none)]>
+	$ mariadb -u <username-2> -p
+	Enter password: <password-2>
+	MariaDB [(none)]>
 
 To have a confirmation of the creation of the database user access rights:
 
-    MariaDB [(none)]> SHOW DATABASES;
-    +--------------------+
-    | Database           |
-    +--------------------+
-    | <database-name>    |
-    | information_schema |
-    +--------------------+
+	MariaDB [(none)]> SHOW DATABASES;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| <database-name>    |
+	| information_schema |
+	+--------------------+
 
 Exit the MariaDB shell via `exit`.
 
 ### Substep 7.3: Installing PHP
 
-    $ sudo apt install php-cgi php-mysql
-    $ dpkg -l | grep php
+	$ sudo apt install php-cgi php-mysql
+	$ dpkg -l | grep php
 
 To download WordPress to /var/www/html:
 
-    $ sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
+	$ sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
 
 To extract downloaded content:
 
-    $ sudo tar -xzvf /var/www/html/latest.tar.gz
+	$ sudo tar -xzvf /var/www/html/latest.tar.gz
 
 Remove tarball:
 
@@ -329,39 +346,39 @@ $ sudo rm /var/www/html/latest.tar.gz
 
 Copy content of /var/www/html/wordpress to /var/www/html:
 
-    $ sudo cp -r /var/www/html/wordpress/* /var/www/html
+	$ sudo cp -r /var/www/html/wordpress/* /var/www/html
 
 Remove /var/www/html/wordpress:
 
-    $ sudo rm -rf /var/www/html/wordpress
+	$ sudo rm -rf /var/www/html/wordpress
 
 Create WordPress configuration file from its sample:
 
-    $ sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+	$ sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 
 Configure WordPress to reference the previously created MariaDB database and user:
 
-    $ sudo vi /var/www/html/wp-config.php
+	$ sudo nano /var/www/html/wp-config.php
 
 Replace the lines below
 
-    23 define( 'DB_NAME', 'database_name_here' );^M
-    26 define( 'DB_USER', 'username_here' );^M
-    29 define( 'DB_PASSWORD', 'password_here' );^M
+	23 define( 'DB_NAME', 'database_name_here' );^M
+	26 define( 'DB_USER', 'username_here' );^M
+	29 define( 'DB_PASSWORD', 'password_here' );^M
 
 with:
 
-    23 define( 'DB_NAME', '<database-name>' );^M
-    26 define( 'DB_USER', '<username-2>' );^M
-    29 define( 'DB_PASSWORD', '<password-2>' );^M
+	23 define( 'DB_NAME', '<database-name>' );^M
+	26 define( 'DB_USER', '<username-2>' );^M
+	29 define( 'DB_PASSWORD', '<password-2>' );^M
 
 ### Substep 7.4: Configuring Lighttpd
 
 Enable lighttpd modules as follows:
 
-    $ sudo lighty-enable-mod fastcgi
-    $ sudo lighty-enable-mod fastcgi-php
-    $ sudo service lighttpd force-reload
+	$ sudo lighty-enable-mod fastcgi
+	$ sudo lighty-enable-mod fastcgi-php
+	$ sudo service lighttpd force-reload
 
 Remember that the official documentation is always the most reliable source of information.
 Personally, I followed the following tutorial pages and everything works just fine (I installed Apache2 at first, and only later lighttpd)!
@@ -375,7 +392,7 @@ Personally, I followed the following tutorial pages and everything works just fi
 I decided to install Icecast, a streaming media (audio/video) server distributed under the GNU license.
 It can be used to create an Internet radio station a privately running jukebox, or a podcast, and it's very versatile since it supports many different types of audio and video files.
 
-    sudo apt-get install icecast2
+	sudo apt-get install icecast2
 
 For a tutorial for configuring Icecast, please refer to the official documentation pages of Icecast and Ubuntu:
 * <https://doc.ubuntu-fr.org/icecast2>
@@ -403,7 +420,7 @@ There are various commands to remove a package:
 #### Tips:
 * If you have the following error when you reboot your VM, change the Display settings in your VirtualBox settings, as explained here: https://unix.stackexchange.com/questions/502540/why-does-drmvmw-host-log-vmwgfx-error-failed-to-send-host-log-message-sh.
 
-    $ drm:vmw_host_log *ERROR* Failed to send host log message.
+	$ drm:vmw_host_log *ERROR* Failed to send host log message.
 
 I thank ayoub0x1 <https://github.com/ayoub0x1/born2beroot>, HEADLIGHTER <https://github.com/HEADLIGHTER/Born2BeRoot-42>, GuillaumeOz <https://github.com/GuillaumeOz/Born2beroot> and Baigalaa <https://baigal.medium.com/born2beroot-e6e26dfb50ac> to the work of whom this walkthrough is freely inspired.
 Finally, I'd like to thank FdB <https://github.com/bcheronn> for his wise pieces of advice support.

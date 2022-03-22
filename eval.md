@@ -102,8 +102,8 @@ CentOS and Debian both are used as internet servers or web servers like web, ema
 
 or
 
-//	$ sudo systemctl status ufw
-//	$ sudo systemctl status sshd
+	$ sudo systemctl status ufw
+	$ sudo systemctl status sshd
 
 ## check the OS
 
@@ -134,9 +134,9 @@ To check if password rules apply to a username:
 
 Open the following files to show the modifications implying the password policy:
 
-//	$ sudo nano /etc/sudoers
-//	$ sudo nano /etc/login.defs
-//	$ sudo nano /etc/pam.d/common-password
+	$ sudo nano /etc/sudoers
+	$ sudo nano /etc/login.defs
+	$ sudo nano /etc/pam.d/common-password
 
 Change the password attributed to your user:
 
@@ -198,10 +198,37 @@ Reboot to actualize the change:
 
 	$ sudo reboot
 
-## Deleting a ufw rule
+## Showing the partitions of the machine:
 
-	$ sudo ufw status <number>
-	$ sudo ufw delete <number>
+	$ lsblk
+
+## Verifying the sudo program status
+
+	nano /var/log/sudo/sudo.log
+
+## Creating and deleting a ufw rule
+
+	$ sudo ufw allow 8080
+	$ sudo ufw status 8080
+	$ sudo ufw delete 8080
+
+## Connecting to the VM via an SSH connection
+
+Find your IP address:
+
+	$ ip a
+
+Connect yourself to the port 4242:
+	$ ssh <username@IP_address> -p 4242
+
+Try to connect as root via the SSH connection:
+	$ ssh root@<IP_address> -p 4242
+
+## The script monitoring.sh
+
+	nano /usr/local/bin/monitoring.sh
+
+Here you may insert your /path/to/monitoring.sh.
 
 ## Getting the signature file of your machine (for MacOS users)
 
