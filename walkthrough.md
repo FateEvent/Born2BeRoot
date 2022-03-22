@@ -114,10 +114,11 @@ You may verify if the program has been correctly installed by typing:
 
 ### Substep 3.3 - Installing UFW (Uncomplicated Firewall)
 
-1) `$ sudo apt install ufw`
+1) `$ sudo apt-get install ufw`
 2) `$ sudo ufw enable`
-3) `$ sudo ufw allow 4242`
-4) `$ sudo ufw status`
+3) `$ sudo ufw allow ssh` -> To configure the rules
+4) `$ sudo ufw allow 4242` -> To configure the port rule
+5) `$ sudo ufw status` -> To check whether the port rule has been added
 The firewall should be active with the ports 4242 and 4242(v6) allowed (from anywhere)
 
 ### Substep 3.4 - Configuring sudo
@@ -220,7 +221,7 @@ wget is a free and open source tool for downloading files directly from web repo
 
 ## STEP 6 - Configuring Cron Jobs
 
-All you need to do now, is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh.
+All you need to do now, is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh, that I put in `/usr/local/bin/`.
 To find some of the information you need, it is necessary for you to install net-tools.
 
 	$ sudo apt install net-tools
