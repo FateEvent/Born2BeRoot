@@ -102,8 +102,8 @@ CentOS and Debian both are used as internet servers or web servers like web, ema
 
 or
 
-	$ sudo systemctl status ufw
-	$ sudo systemctl status sshd
+//	$ sudo systemctl status ufw
+//	$ sudo systemctl status sshd
 
 ## check the OS
 
@@ -134,9 +134,13 @@ To check if password rules apply to a username:
 
 Open the following files to show the modifications implying the password policy:
 
-	$ sudo nano /etc/sudoers
-	$ sudo nano /etc/login.defs
-	$ sudo nano /etc/pam.d/common-password
+//	$ sudo nano /etc/sudoers
+//	$ sudo nano /etc/login.defs
+//	$ sudo nano /etc/pam.d/common-password
+
+Change the password attributed to your user:
+
+//	$ sudo passwd <username>
 
 ### Create a group
 
