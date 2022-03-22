@@ -159,8 +159,8 @@ For security reasons too, the paths that can be used by sudo must be restricted.
 
 `PASS_WARN_AGE` is set to 7 by default.
 
-3) `sudo apt install libpam-pwquality`
-4) `sudo nano /etc/pam.d/common-password`
+3) `$ sudo apt install libpam-pwquality`
+4) `$ sudo nano /etc/pam.d/common-password`
 5) At the end of the line: `"password requisite pam_pwquality.so retry=3` add the following parameters:
 
         minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root

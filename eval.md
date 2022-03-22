@@ -120,10 +120,23 @@ Check all the local users:
 Create the user:
 
 	$ sudo adduser <username>
+	$ sudo reboot
 
 Verify whether user was successfully created:
 
 	$ getent passwd <username>
+
+## Check password rules
+
+To check if password rules apply to a username:
+
+	$ sudo chage -l <username>
+
+Open the following files to show the modifications implying the password policy:
+
+	$ sudo nano /etc/sudoers
+	$ sudo nano /etc/login.defs
+	$ sudo nano /etc/pam.d/common-password
 
 ### Create a group
 
@@ -147,6 +160,7 @@ Check if the user is in a group:
 	$ getent group evaluating
 
 Check to which groups a user account belongs:
+
 `$ groups <username>` -> To check to which groups an user account belongs
 
 To delete a user from a group:
@@ -156,12 +170,6 @@ To delete a user from a group:
 To delete a group:
 
 	$ sudo groupdel <group_name>
-
-## Password rules
-
-To check if password rules apply to a username:
-
-	$ sudo chage -l <username>
 
 ## Changing a hostname
 
