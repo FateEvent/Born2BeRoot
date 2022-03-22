@@ -10,6 +10,8 @@ Linux, Debian 64-bit -> 1gb -> create vdf -> VDI -> Dynamically allocated -> 8gb
 
 Settings -> storage -> IDE -> cd -> debian-xx-x-x-amd64-netinst.iso
 
+It may be interesting to give a look at the OpenClassrooms lesson about virtualization, available here: <https://openclassrooms.com/fr/courses/7170491-initiez-vous-a-linux/7252071-installez-linux-ubuntu>, and to the French documentation of Ubuntu about it: <https://doc.ubuntu-fr.org/virtualbox>.
+
 ## STEP 2 - Installation  
 
 Install (Not Graphical install)
@@ -22,27 +24,21 @@ Hostname: yourintralogin42 -> Domain name: leave empty ->
 Real/intra/else, doesn't matter. Username: your_intra_login ->
 Password: zxc1337 (for example) -> Time zone: Your time zone(yes).
 
-### substep 2.1 - partition setup
+### Substep 2.1 - partition setup
+
+You can follow the step-to-step video-tutorial by Youssef Ossama here: <https://www.youtube.com/watch?v=OQEdjt38ZJA>
 
 #### For the basic part:
-Partition method: Guided - use entire disk and set up encrypted LVM ->
--> SCSIX (0,0,0) (sda) - 8.6 GB ATA VBOX HARDDISK -> separate /home partition ->
--> yes. Wait.
+Partition method: Guided - use entire disk and set up encrypted LVM -> SCSIX (0,0,0) (sda) - 8.6 GB ATA VBOX HARDDISK -> separate /home partition -> yes.
 Enter encryption passphrase twice -> 8.1G or just max ->
--> Finish partitioning and write changes to disk -> yes.
+Finish partitioning and write changes to disk -> yes.
 
 #### For the bonus part:  
 
-Partition method: Manual -> SCSIX (0,0,0( (sda) -> 8.6 GB ATA HARDDISK ->
--> yes -> pri/log 8.6 GB FREE SPACE -> Create a new partition (CRANP next) ->
--> 500M -> Primary -> Beginning -> Mount point -> Boot ->
--> Done setting up the partition(DSUP) -> pri/log -> CRANP -> 8.1GB or "max"->
--> Logical -> mount point -> Do not mount it -> DSUP ->
--> Configure encrypted volumes -> Yes -> Create encrypted volumes ->
--> /dev/sda5 (press space to choose it) -> DSUTP -> Finish -> yes -> Wait.
+Partition method: Manual -> SCSIX (0,0,0) (sda) -> 8.6 GB ATA HARDDISK -> yes -> pri/log 8.6 GB FREE SPACE -> Create a new partition (CRANP next) -> 500M -> Primary -> Beginning -> Mount point -> Boot -> Done setting up the partition(DSUP)
+-> pri/log -> CRANP -> 8.1GB or "max" -> Logical -> mount point -> Do not mount it -> DSUP -> Configure encrypted volumes -> Yes -> Create encrypted volumes -> /dev/sda5 (press space to choose it) -> DSUTP -> Finish -> yes.
 
-Enter encryption passphrase twice -> Configure the Logical Volume Manager ->
--> yes -> Create volume groupe -> LVMGroup ->
+Enter encryption passphrase twice -> Configure the Logical Volume Manager -> yes -> Create volume groupe -> LVMGroup ->
 -> press pace on /dev/mapper/sda5_crypt, continue ->
 -> Create logical volume(CLV next) -> LVMGroup (LVMG next) -> root -> 2G
 CLV -> LVMG -> swap -> 1G
@@ -66,9 +62,7 @@ Scroll below -> Finish partitioning and write changes to disk -> yes
 Installation will begin.
 
 Scan another CD or DVD? -> no
-Debian archive mirror country -> your nearest mirror or Russian Federation for
-Moscow campus -> deb.debian.org (doesn't matter) ->
--> leave proxy info field empty and proceed.
+Debian archive mirror country -> your nearest mirror -> deb.debian.org (doesn't matter) -> leave proxy info field empty and proceed.
 
 Participate in the package usage survey? -> NO!
 
@@ -85,18 +79,15 @@ Now we are going to install the necessary softwares and configure them.
 
 You may here choose to install the text editor of yoour choice. I personally chose Nano, but you may choose Vim if you prefer.
 
-`$ apt-get update -y`
-`$ apt-get upgrade -y`
-
-and
-
 `$ apt-get install vim`
 
 or
 
 `$ apt-get install nano`
 
-### substep 3.1 - Installing sudo & adding user in groups
+### Substep 3.1 - Installing sudo and adding user in groups
+
+For information about the sudo command, see eval.md.
 
 1) `su -` -> root password -> apt install sudo
 2) `$ adduser <your_username> sudo` (yep, you should be in root)
@@ -110,42 +101,59 @@ You may check whether the user has been successfully added to sudo group by typi
 
 `$ getent group sudo`
 
-### substep 3.2 - Installing SSH
+### Substep 3.2 - Installing SSH
 
 1) `$ sudo apt install openssh-server`
+You may verify if the program has been correctly installed by typing:
+`$ dpkg -l | grep ssh` 
 2) `$ sudo nano /etc/ssh/sshd_config` -> change line "#Port 22" to "Port 4242" and
 "#PermitRootLogin prohibit-password" to "PermitRootLogin no" -> save and exit
 3) `$ sudo nano /etc/ssh/ssh_config` -> change line "#Port 22" to "Port 4242"
-4) `$ sudo service ssh status`. It's should be active.
+4) `$ sudo service ssh status`. It should be active. You may also check ssh status via:
+`$ systemctl status ssh`
 
-### substep 3.3 - Installing UFW
+### Substep 3.3 - Installing UFW (Uncomplicated Firewall)
 
 1) `$ sudo apt install ufw`
 2) `$ sudo ufw enable`
 3) `$ sudo ufw allow 4242`
 4) `$ sudo ufw status`
-It should be active with the ports 4242 and 4242(v6) allowed (from anywhere)
+The firewall should be active with the ports 4242 and 4242(v6) allowed (from anywhere)
 
-### substep 3.4 - Configuring sudo
+### Substep 3.4 - Configuring sudo
 
-1) `$ sudo touch /etc/sudoers.d/sudoconfig`
-2) `$ sudo mkdir /var/log/sudo` (for sudo log files, yes)
-3) `$ sudo nano /etc/sudoers.d/sudoconfig` then write the following lines in our new file:
+Open the file `sudoers`:
+`$ sudo nano /etc/sudoers`
 
-* Defaults      passwd_tries=3
-* Defaults      badpass_message="Incorrect password" <- you can set your own message here
-* Defaults      log_input,log_output                       
-* Defaults      iolog_dir="/var/log/sudo"
-* Defaults      requiretty
-* Defaults      secure_path="that/long/paths/from/subject"
+For authentication, the use of the sudo command has to be limited to 3 attempts in the event of an incorrect password:
 
-### substep 3.5 - Setting up a strong password policy
+`Defaults    passwd_tries=3`
+
+Add a wrong password warning message:
+`Defaults   badpass_message="Password is wrong, please try again!"`
+
+Each action log file has to be saved in the /var/log/sudo/ folder. If there is no “/var/log/sudo” folder, create the sudo folder inside of “/var/log”:
+``
+Defaults	logfile="/var/log/sudo/sudo.log"
+Defaults	log_input,log_output
+``
+
+Set tty as required.
+Why using tty? If some non-root code is exploited (a PHP script, for example), the `requiretty` option makes sure that the exploited code won't be able to directly upgrade its privileges by running sudo.
+
+`Defaults   requiretty`
+
+For security reasons too, the paths that can be used by sudo must be restricted. As, for instance: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+
+`Defaults   secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"` (It was already the case)
+
+### Substep 3.5 - Setting up a strong password policy
 
 1) `$ sudo nano /etc/login.defs`
 2) replace the following lines like shown above:
 
-* `PASS_MAX_DAYS 99999  -> PASS_MAX_DAYS    30`
-* `PASS_MIN_DAYS 0      -> PASS_MIN_DAYS    2`
+* `PASS_MAX_DAYS 99999`  -> `PASS_MAX_DAYS    30`
+* `PASS_MIN_DAYS 0`      -> `PASS_MIN_DAYS    2`
 
 `PASS_WARN_AGE` is set to 7 by default.
 
@@ -182,32 +190,44 @@ VirtualBox. There's a way to fix it!
 
 Now you can control your virtual machine from the host terminal.
 
-## STEP 5 - Configuring Cron Jobs
+## Step 5 Installing tools
+
+### Substep 5.1: Installing git
+``
+$ apt-get update -y
+$ apt-get upgrade -y
+$ apt-get install git -y
+``
+
+Check git version:
+`$ git --version`
+
+### Substep 5.2: Installing wget
+
+wget is a free and open source tool for downloading files directly from web repositories.
+`$ sudo apt-get install wget`
+
+## STEP 6 - Configuring Cron Jobs
 
 You need to configure cron as root by executing the following line:
-
 `sudo crontab -u root -e`
 
 To schedule a shell script to run every 10 minutes, add the following line at the end of the file:
-
 `*/10 * * * * /path/to/monitoring.sh`
 
 Note: you can add the `wall` command to the cron, as in the following example, or directly on the script, as I did:
-
 `*/10 * * * * /path/to/monitoring.sh | wall`
 
 You may check root's scheduled cron jobs with the following line:
-
 `$ sudo crontab -u root -l`
 
 Now all that you need to do is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh.
 To find some of the information you need, it is necessary for you to install net-tools.
+`$ sudo apt install net-tools`
 
-* [$ sudo apt install net-tools]
+## Step 7 - Installing Lighttpd, MariaDB, PHP and WordPress
 
-## Step 6 - Installing Lighttpd, MariaDB, PHP and WordPress
-
-### substep 6.1 - Installing Lighttpd
+### Substep 7.1 - Installing Lighttpd
 
 `$ sudo apt install lighttpd`
 
@@ -219,7 +239,7 @@ Now let's allow incoming connections using Port 80:
 
 `$ sudo ufw allow 80`
 
-### substep 6.2: Installing and Configuring MariaDB
+### Substep 7.2: Installing and Configuring MariaDB
 
 To install mariadb-server:
 
@@ -282,14 +302,13 @@ MariaDB [(none)]> SHOW DATABASES;
 ``
 Exit the MariaDB shell via `exit`.
 
-### substep 6.3: Installing PHP
+### Substep 7.3: Installing PHP
 
 ``
 $ sudo apt install php-cgi php-mysql
 $ dpkg -l | grep php
 ``
 
-The `wget` command allows you to download files directly from a website.
 To download WordPress to /var/www/html:
 `$ sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html`
 
@@ -326,7 +345,7 @@ with:
 29 define( 'DB_PASSWORD', '<password-2>' );^M
 ``
 
-### Substep 6.4: Configuring Lighttpd
+### Substep 7.4: Configuring Lighttpd
 
 Enable lighttpd modules as follows:
 ``
@@ -338,17 +357,41 @@ $ sudo service lighttpd force-reload
 Remember that the official documentation is always the most reliable source of information.
 Personally, I followed the following tutorial pages and everything works just fine (I installed Apache2 at first, and only later lighttpd)!
 
-* <https://www.it-connect.fr/installer-un-serveur-lamp-linux-apache-mariadb-php-sous-debian-11/>
+* <https://www.it-connect.fr/installer-un-serveur-lamp-linux-apache-mariadb-php-sous-debian-11>
 * <https://www.it-connect.fr/installation-de-wordpress-sous-linux/>
 * <https://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfiguration>
+
+## Step 8 - Installing and configuring Icecast
+
+I decided to install Icecast, a streaming media (audio/video) server distributed under the GNU license.
+It can be used to create an Internet radio station a privately running jukebox, or a podcast, and it's very versatile since it supports many different types of audio and video files. 
+`sudo apt-get install icecast2`
+
+For a tutorial for configuring Icecast, please refer to the official documentation pages of Icecast and Ubuntu:
+<https://doc.ubuntu-fr.org/icecast2>
+<https://www.icecast.org/docs>.
 
 ## Conclusion
 
 !IMPORTANT: Don't forget to make a clone or a snapshot of your VM before the evaluation starts!
 
-Now all you need to do is to prepare for the evaluation. Don't forget to check the answers to the questions in my eval.md file.
+Now all you need to do is to prepare for the evaluation. You may find some information in my eval.md file.
 
-#### useful commands:
-`ip a` to find the ip address of your machine
+#### Useful commands:
+* `$ apt-get update -y` & `$ apt-get upgrade -y` to update all the softwares installed in your virtual machine;
+* `ip a` to find the ip address of your machine;
+* `systemctl status <program_name>` to check the working status of a program;
+* `systemctl restart <program_name>` to restart a program;
+* `systemctl reboot` to reboot the virtual machine;
+* `sudo apt-cache search <program_name>` to find a software in Debian;
+* `sudo apt-get install <program_name>` to install a software.
 
-I thank HEADLIGHTER <https://github.com/HEADLIGHTER/Born2BeRoot-42> and GuillaumeOz <https://github.com/GuillaumeOz/Born2beroot> to the work of whom this walkthrough is freely inspired.
+#### Tips:
+* If you have the following error when you reboot your VM, change the Display settings in your VirtualBox settings, as explained here: https://unix.stackexchange.com/questions/502540/why-does-drmvmw-host-log-vmwgfx-error-failed-to-send-host-log-message-sh.
+
+`$ drm:vmw_host_log *ERROR* Failed to send host log message.`
+
+I thank ayoub0x1 <https://github.com/ayoub0x1/born2beroot>, HEADLIGHTER <https://github.com/HEADLIGHTER/Born2BeRoot-42>, GuillaumeOz <https://github.com/GuillaumeOz/Born2beroot> and Baigalaa <https://baigal.medium.com/born2beroot-e6e26dfb50ac> to the work of whom this walkthrough is freely inspired.
+Finally, I'd like to thank FdB <https://github.com/bcheronn> for his wise pieces of advice support.
+
+For useful tips about the markdown language, see <https://wordpress.com/support/markdown-quick-reference>.
