@@ -38,7 +38,7 @@ The IP address will be therefore slightly different, since there can't be two ma
 
 AppArmor ("Application Armor") is a Linux kernel security module that allows the system administrator to restrict programs' capabilities with tailor-made, per-program profiles. Profiles can allow capabilities like network access, raw socket access, and the permission to read, write, or execute files on matching paths. It's what is called mandatory access control (MAC), a type of access control by which the operating system or database constrains the ability of a subject, a process, for example, to access or generally perform some sort of operation on an object, a file, a directory, a TCP/UDP port, etc. Subjects and objects each have a set of security attributes. Whenever a subject tries to accede to an object, their attributes are examined.
 It exists, however, two ways in which profiles may work, a "complaint mode" and an "enforce mode". In the last case, the processes are restrained from performing restricted tasks, while in the first one, AppArmor allows applications to do these tasks, but creates a registry entry to display the complaint.
-AppArmor is partly offered as an alternative to SELinux, which critics consider difficult for administrators to set up and maintain. Unlike SELinux, which is based on applying labels to files, AppArmor works with file paths.
+AppArmor is partly offered as an alternative to SELinux, generally considered as difficult for administrators to set up and maintain. Unlike SELinux, which is based on the application of labels to files, AppArmor works with file paths.
 
 SELinux (Security-Enhanced Linux) is a security architecture for Linux systems that allows administrators to better control access to the system. This architecture was originally designed by the NSA, the national security agency of the United States, as a series of fixes for the Linux kernel based on the LSM (Linux Security Modules) framework. 
 
@@ -247,11 +247,13 @@ Now start the server for testing:
 `$ sudo lighttpd -D -f /etc/lighttpd/lighttpd.conf` -> The Lighttpd server is on, but the daemon is off
 
 Enable the daemon:
+
 	# /etc/init.d/lighttpd start
 
 Wordpress is connected to the port 3000, so I type <IP address>:3000 on a browser to find my site.
 
 Stop it:
+
 	# /etc/init.d/lighttpd stop
 
 ### Starting Icecast
