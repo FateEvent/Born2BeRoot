@@ -38,7 +38,7 @@ Finish partitioning and write changes to disk -> yes.
 Partition method: Manual -> SCSIX (0,0,0) (sda) -> 8.6 GB ATA HARDDISK -> yes -> pri/log 8.6 GB FREE SPACE -> Create a new partition (CRANP next) -> 500M -> Primary -> Beginning -> Mount point -> Boot -> Done setting up the partition(DSUP)
 -> pri/log -> CRANP -> 8.1GB or "max" -> Logical -> mount point -> Do not mount it -> DSUP -> Configure encrypted volumes -> Yes -> Create encrypted volumes -> /dev/sda5 (press space to choose it) -> DSUTP -> Finish -> yes.
 
-Enter encryption passphrase twice -> Configure the Logical Volume Manager -> yes -> Create volume groupe -> LVMGroup ->
+Enter encryption passphrase twice -> Configure the Logical Volume Manager -> yes -> Create volume group -> LVMGroup ->
 -> press pace on /dev/mapper/sda5_crypt, continue ->
 -> Create logical volume(CLV next) -> LVMGroup (LVMG next) -> root -> 2G
 CLV -> LVMG -> swap -> 1G

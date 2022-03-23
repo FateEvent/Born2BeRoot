@@ -120,7 +120,6 @@ Check all the local users:
 Create the user:
 
 	$ sudo adduser <username>
-	$ sudo reboot
 
 Verify whether user was successfully created:
 
@@ -147,7 +146,7 @@ Change the password attributed to your user:
 	$ sudo groupadd user42
 	$ sudo groupadd evaluating
 
-Check if group created:
+Check if the group is created:
 
 	$ getent group <group_name>
 
@@ -157,6 +156,11 @@ Assign a user into the “evaluating” group:
 
 	$ sudo usermod -aG user42 <username>
 	$ sudo usermod -aG evaluating <username>
+
+or
+
+	$ sudo adduser <username> user42
+	$ sudo adduser <username> evaluating
 
 Check if the user is in a group:
 
@@ -194,7 +198,7 @@ and replace the <old_hostname> with the <new_hostname>:
 	127.0.0.1       localhost
 	127.0.0.1       new_hostname
 
-Reboot to actualize the change:
+Reboot to actualize the changes:
 
 	$ sudo reboot
 
