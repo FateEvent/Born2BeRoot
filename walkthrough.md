@@ -174,6 +174,17 @@ For security reasons too, the paths that can be used by sudo must be restricted.
 
 		minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
 
+Pour info:
+
+* retry=N - Maximum number of retries to change password. The default for this parameter is 1.
+* minlen=N - The minimum acceptable size for the new password (plus one if credits are not disabled which is the default). In addition to the number of characters in the new password, credit (of +1 in length) is given for each different kind of character (other, upper, lower and digit). The default value is 9.
+* lcredit=N - Define the maximum credit for containing lowercase letters in the password. Default value is 1.
+* ucredit=N - Define the maximum number for containing uppercase letters in the password. Default value is 1.
+* dcredit=N - Define the maximum credit for containing digits in the password. Default value is 1.
+* ocredit=N - Define the maximum credit for containing other characters in the password. Default value is 1.
+* difok=N - Define the number of characters that must be different from the previous password.
+* reject_username - Restrict the users to use their name as password.
+
 	Your line should look as follows:
 
 		password requisite pam_pwquality.so retry=3 minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
@@ -395,9 +406,15 @@ It can be used to create an Internet radio station a privately running jukebox, 
 
 	sudo apt-get install icecast2
 
-For a tutorial for configuring Icecast, please refer to the official documentation pages of Icecast and Ubuntu:
-* <https://doc.ubuntu-fr.org/icecast2>
+For a tutorial for configuring Icecast, please refer to the official documentation pages of Icecast:
 * <https://www.icecast.org/docs>.
+
+## Step 9 - Getting the signature file of your machine (for MacOS users)
+
+	shasum <name_of_your_machine.vdi>
+
+Type the command in the MacOS terminal and then copy and paste the code you get on a file called signature.txt that you will put at the root of your repository.
+Remember to take a snapshot of your machine to use during the evaluation, so that you will be able to use the precited command on your machine to demonstrate you didn't modify it before the examination.
 
 ## Conclusion
 
@@ -425,5 +442,8 @@ There are various commands to remove a package:
 
 I thank ayoub0x1 <https://github.com/ayoub0x1/born2beroot>, HEADLIGHTER <https://github.com/HEADLIGHTER/Born2BeRoot-42>, GuillaumeOz <https://github.com/GuillaumeOz/Born2beroot> and Baigalaa <https://baigal.medium.com/born2beroot-e6e26dfb50ac> to the work of whom this walkthrough is freely inspired.
 Finally, I'd like to thank FdB <https://github.com/bcheronn> for his wise pieces of advice support.
+
+Other sources:
+* OSTechNix, <https://ostechnix.com/force-users-use-strong-passwords-debian-ubuntu>.
 
 For useful tips about the markdown language, see <https://wordpress.com/support/markdown-quick-reference>.

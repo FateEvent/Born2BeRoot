@@ -140,7 +140,7 @@ Open the following files to show the modifications implying the password policy:
 
 Change the password attributed to your user:
 
-//	$ sudo passwd <username>
+	$ sudo passwd <username>
 
 ### Create a group
 
@@ -149,7 +149,7 @@ Change the password attributed to your user:
 
 Check if group created:
 
-	$ getent group
+	$ getent group <group_name>
 
 ### Assign the user to group
 
@@ -209,8 +209,8 @@ Reboot to actualize the change:
 ## Creating and deleting a ufw rule
 
 	$ sudo ufw allow 8080
-	$ sudo ufw status 8080
-	$ sudo ufw delete 8080
+	$ sudo ufw status
+	$ sudo ufw delete allow 8080
 
 ## Connecting to the VM via an SSH connection
 
@@ -219,9 +219,13 @@ Find your IP address:
 	$ ip a
 
 Connect yourself to the port 4242:
+
 	$ ssh <username@IP_address> -p 4242
 
+	$ exit
+
 Try to connect as root via the SSH connection:
+
 	$ ssh root@<IP_address> -p 4242
 
 ## The script monitoring.sh
@@ -230,12 +234,35 @@ Try to connect as root via the SSH connection:
 
 Here you may insert your /path/to/monitoring.sh.
 
-## Getting the signature file of your machine (for MacOS users)
+## Starting the servers
 
-	shasum <name_of_your_machine.vdi>
+### Getting Lighttpd to work
 
-Type the command in the MacOS terminal and then copy and paste the code you get on a file called signature.txt that you will put at the root of your repository.
-Remember to take a snapshot of your machine to use during the evaluation, so that you will be able to use the precited command on your machine to demonstrate you didn't modify it before the examination.
+First, check that your configuration is ok:
+
+	$ sudo lighttpd -tt -f /etc/lighttpd/lighttpd.conf
+
+Now start the server for testing:
+
+`$ sudo lighttpd -D -f /etc/lighttpd/lighttpd.conf` -> The Lighttpd server is on, but the daemon is off
+
+Enable the daemon:
+	# /etc/init.d/lighttpd start
+
+Wordpress is connected to the port 3000, so I type <IP address>:3000 on a browser to find my site.
+
+Stop it:
+	# /etc/init.d/lighttpd stop
+
+### Starting Icecast
+
+Start the server with the following command:
+
+	$ sudo icecast2 -c /etc/icecast2/icecast.xml
+
+The Icecast server is connected to the port 8000, so I type <IP address>:8000 into a browser to find it.
+
+The daemon is not on in this case.
 
 ### Sources:
 * Wikipedia, <https://en.wikipedia.org/wiki/Virtualization>;
@@ -243,5 +270,6 @@ Remember to take a snapshot of your machine to use during the evaluation, so tha
 * Computer Hope, <https://www.computerhope.com/unix/aptitude.htm>;
 * EducBa, <https://www.educba.com/centos-vs-debian>;
 * AskUbuntu, <https://askubuntu.com/questions/187888/what-is-the-correct-way-to-completely-remove-an-application>;
+* Pascal Wolff;
 * GuillaumeOz, <https://github.com/GuillaumeOz/Born2beroot>;
 * Baigalaa, <https://baigal.medium.com/born2beroot-e6e26dfb50ac>.
