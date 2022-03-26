@@ -240,7 +240,7 @@ Here you may insert your /path/to/monitoring.sh.
 
 ## Starting the servers
 
-### Getting Lighttpd to work
+### Running Lighttpd
 
 First, check that your configuration is ok:
 
@@ -260,7 +260,7 @@ Stop it:
 
 	# /etc/init.d/lighttpd stop
 
-### Starting Icecast
+### Running Icecast
 
 Start the server with the following command:
 
