@@ -215,6 +215,10 @@ Reboot to actualize the changes:
 	$ sudo ufw allow 8080
 	$ sudo ufw status
 	$ sudo ufw delete allow 8080
+or
+
+	$ sudo ufw delete 4
+(if the port 8080 is the fourth one in the list, for example).
 
 ## Connecting to the VM via an SSH connection
 
