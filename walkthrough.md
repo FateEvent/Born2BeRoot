@@ -443,7 +443,7 @@ Enable lighttpd modules as follows:
 Personally, I found it useful to follow the tutorial pages for the installation and configuration of an Apache2 server at first, and only later for a lighttpd server)!
 
 * <https://www.it-connect.fr/installer-un-serveur-lamp-linux-apache-mariadb-php-sous-debian-11>,
-* <https://www.it-connect.fr/installation-de-wordpress-sous-linux/>.
+* <https://www.it-connect.fr/installation-de-wordpress-sous-linux>.
 
 Remember that the official documentation is always the most reliable source of information.
 You may find complementary material on the Lighttpd official website and on the official Ubuntu French community documentation:
