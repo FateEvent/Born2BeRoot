@@ -1,5 +1,36 @@
 # Born2BeRoot, or creating and configuring a virtual machine with VirtualBox
 
+## Table of Contents
+- [Born2BeRoot, or creating and configuring a virtual machine with VirtualBox](#born2beroot-or-creating-and-configuring-a-virtual-machine-with-virtualbox)
+	- [Table of Contents](#table-of-contents)
+	- [STEP 1 - Installation of VirtualBox and VM settings](#step-1---installation-of-virtualbox-and-vm-settings)
+	- [STEP 2 - Installation](#step-2---installation)
+		- [Substep 2.1 - Partition setup](#substep-21---partition-setup)
+			- [Subsubstep 2.1.1 - The basic part:](#subsubstep-211---the-basic-part)
+			- [Subsubstep 2.1.2 - The bonus part:](#subsubstep-212---the-bonus-part)
+	- [STEP 3 - Configure your machine](#step-3---configure-your-machine)
+		- [Substep 3.1 - Installing sudo and adding user in groups](#substep-31---installing-sudo-and-adding-user-in-groups)
+			- [Subsubstep 3.1.1 - Installing a text editor](#subsubstep-311---installing-a-text-editor)
+		- [Substep 3.2 - Installing SSH](#substep-32---installing-ssh)
+		- [Substep 3.3 - Installing UFW (Uncomplicated Firewall)](#substep-33---installing-ufw-uncomplicated-firewall)
+		- [Substep 3.4 - Configuring the sudo powers](#substep-34---configuring-the-sudo-powers)
+		- [Substep 3.5 - Setting up a strong password policy](#substep-35---setting-up-a-strong-password-policy)
+	- [STEP 4 - Network adapter configuration](#step-4---network-adapter-configuration)
+	- [Step 5 Installing tools](#step-5-installing-tools)
+		- [Substep 5.1: Installing git](#substep-51-installing-git)
+		- [Substep 5.2: Installing wget](#substep-52-installing-wget)
+	- [STEP 6 - Configuring Cron Jobs](#step-6---configuring-cron-jobs)
+	- [Step 7 - Installing Lighttpd, MariaDB, PHP and WordPress](#step-7---installing-lighttpd-mariadb-php-and-wordpress)
+		- [Substep 7.1 - Installing Lighttpd](#substep-71---installing-lighttpd)
+		- [Substep 7.2: Installing and Configuring MariaDB](#substep-72-installing-and-configuring-mariadb)
+		- [Substep 7.3: Installing PHP](#substep-73-installing-php)
+		- [Substep 7.4: Configuring Lighttpd](#substep-74-configuring-lighttpd)
+	- [Step 8 - Installing and configuring Icecast](#step-8---installing-and-configuring-icecast)
+	- [Step 9 - Getting the signature file of your machine (for MacOS users)](#step-9---getting-the-signature-file-of-your-machine-for-macos-users)
+	- [Conclusion](#conclusion)
+			- [Useful commands:](#useful-commands)
+			- [Tips:](#tips)
+
 ## STEP 1 - Installation of VirtualBox and VM settings
 
 You may find the the last version of VirtualBox at <https://www.virtualbox.org/wiki/Downloads>.
@@ -30,16 +61,16 @@ Hostname: yourintralogin42 -> Domain name: leave empty ->
 Real/intra/else, doesn't matter. Username: your_intra_login ->
 Password: zxc1337 (for example) -> Time zone: Your time zone(yes).
 
-### Substep 2.1 - partition setup
+### Substep 2.1 - Partition setup
 
 You can follow the step-to-step video-tutorial by Youssef Ossama here: <https://www.youtube.com/watch?v=OQEdjt38ZJA>
 
-#### For the basic part:
+#### Subsubstep 2.1.1 - The basic part:
 Partition method: Guided - use entire disk and set up encrypted LVM -> SCSIX (0,0,0) (sda) - 8.6 GB ATA VBOX HARDDISK -> separate /home partition -> yes.
 Enter encryption passphrase twice -> 8.1G or just max ->
 Finish partitioning and write changes to disk -> yes.
 
-#### For the bonus part:  
+#### Subsubstep 2.1.2 - The bonus part:  
 
 Partition method: Manual -> SCSIX (0,0,0) (sda) -> 8.6 GB ATA HARDDISK -> yes -> pri/log 8.6 GB FREE SPACE -> Create a new partition (CRANP next) -> 500M -> Primary -> Beginning -> Mount point -> Boot -> Done setting up the partition(DSUP)
 -> pri/log -> CRANP -> 8.1GB or "max" -> Logical -> mount point -> Do not mount it -> DSUP -> Configure encrypted volumes -> Yes -> Create encrypted volumes -> /dev/sda5 (press space to choose it) -> DSUTP -> Finish -> yes.
@@ -299,11 +330,17 @@ Note: you can add the `wall` command to the cron, as in the following example, o
 
 	*/10 * * * * /usr/local/bin/monitoring.sh | wall
 
+Cron generally requires that commands are terminated with a new line. Edit your crontab; go to the end of the line which contains the last command and insert a new line (press enter).
+
 You may check root's scheduled cron jobs with the following line:
 
 	$ sudo crontab -u root -l
 
-Consult my monitoring.sh if you're curious about how you may implement it, I recommend, anyway, to try to do it on your own.
+For issues that may arise during the configuration of crontab, consult the following forum page:
+* <https://askubuntu.com/questions/23009/why-crontab-scripts-are-not-working>,
+* <https://serverfault.com/questions/449651/why-is-my-crontab-not-working-and-how-can-i-troubleshoot-it>.
+
+Consult my monitoring.sh if you're curious about how you may implement it. However, I recommend to try to do it on your own.
 
 ## Step 7 - Installing Lighttpd, MariaDB, PHP and WordPress
 
