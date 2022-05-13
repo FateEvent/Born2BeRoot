@@ -1,5 +1,22 @@
 # The evaluation cheat sheet for Born2BeRoot
 
+## Table of Contents
+- [A bit of theory](#a-bit-of-theory)
+	- [Virtualization](#virtualization)
+      - [How do Virtual Machines work?](#how-do-virtual-machines-work)
+      - [Advantages?](#advantages)
+      - [A snapshot](#a-snapshot)
+    - [What is the difference between AppArmor and SELinux?](#what-is-the-difference-between-apparmor-and-selinux)
+    - [What is the difference between Apt and Aptitude?](#what-is-the-difference-between-apt-and-aptitude)
+    - [What's SSH?](#whats-ssh)
+    - [How to implement UFW with SSH?](#how-to-implement-ufw-with-ssh)
+    - [Cron, wall and the useless thing](#cron-wall-and-the-useless-thing)
+      - [What's Cron?](#whats-cron)
+      - [The wall command](#the-wall-command)
+    - [CentOS and Debian](#centos-and-debian)
+  - [The practical part of the evaluation](#the-practical-part-of-the-evaluation)
+  - [Sources](#sources)
+
 ## A bit of theory
 
 ### Virtualization
@@ -97,7 +114,9 @@ CentOS and Debian both are used as internet servers or web servers like web, ema
 | It does not have an easy GUI (Graphic User Interface). | It has desktop friendly applications and GUI. |
 | The core software of CentOS, the kernel and all its utilities, come from the distribution, while the add-on softwares like Apache, PHP, Java, and MySQL come from newer sources such as Fedora or directly from vendors such as MySQL. | Debian provides unique functionalities which are necessary for a system. Apt repositories in package managers have the latest source code for several open-source languages and frameworks like ruby, rails, PostgreSQL, Golang, selenium, angular2-dart, etc. |
 
-## Verify the status of UFW and SSH
+## The practical part of the evaluation
+
+### Verify the status of UFW and SSH
 
 	$ sudo ufw status
 	$ sudo service ssh status
@@ -107,13 +126,13 @@ or
 	$ sudo systemctl status ufw
 	$ sudo systemctl status sshd
 
-## check the OS
+### check the OS
 
 	$ dpkg --version
 
-## Users and groups
+### Users and groups
 
-### Create a user
+#### Create a user
 
 Check all the local users:
 
@@ -127,7 +146,7 @@ Verify whether user was successfully created:
 
 	$ getent passwd <username>
 
-## Check password rules
+#### Check password rules
 
 To check if password rules apply to a username:
 
@@ -143,7 +162,7 @@ Change the password attributed to your user:
 
 	$ sudo passwd <username>
 
-### Create a group
+#### Create a group
 
 	$ sudo groupadd user42
 	$ sudo groupadd evaluating
@@ -152,7 +171,7 @@ Check if the group is created:
 
 	$ getent group <group_name>
 
-### Assign the user to group
+#### Assign the user to group
 
 Assign a user into the “evaluating” group:
 
@@ -181,7 +200,7 @@ To delete a group:
 
 	$ sudo groupdel <group_name>
 
-## Changing a hostname
+### Changing a hostname
 
 Check the current hostname:
 
@@ -204,15 +223,15 @@ Reboot to actualize the changes:
 
 	$ sudo reboot
 
-## Showing the partitions of the machine:
+### Showing the partitions of the machine:
 
 	$ lsblk
 
-## Verifying the sudo program status
+### Verifying the sudo program status
 
 	nano /var/log/sudo/sudo.log
 
-## Creating and deleting a ufw rule
+### Creating and deleting a ufw rule
 
 	$ sudo ufw allow 8080
 	$ sudo ufw status
@@ -222,7 +241,7 @@ or
 	$ sudo ufw delete 4
 (if the port 8080 is the fourth one in the list, for example).
 
-## Connecting to the VM via an SSH connection
+### Connecting to the VM via an SSH connection
 
 Find your IP address:
 
@@ -238,15 +257,15 @@ Try to connect as root via the SSH connection:
 
 	$ ssh root@<IP_address> -p 4242
 
-## The script monitoring.sh
+### The script monitoring.sh
 
 	nano /usr/local/bin/monitoring.sh
 
 Here you may insert your /path/to/monitoring.sh.
 
-## Starting the servers
+### Starting the servers
 
-### Running Lighttpd
+#### Running Lighttpd
 
 First, check that your configuration is ok:
 
@@ -266,7 +285,7 @@ Stop it:
 
 	# /etc/init.d/lighttpd stop
 
-### Running Icecast
+#### Running Icecast
 
 Start the server with the following command:
 
@@ -276,7 +295,7 @@ The Icecast server is connected to the port 8000, so I type <IP address>:8000 in
 
 The daemon is not on in this case.
 
-### Sources:
+## Sources:
 * Wikipedia, <https://en.wikipedia.org/wiki/Virtualization>;
 * Ayoub01, <https://github.com/ayoub0x1/born2beroot>;
 * Computer Hope, <https://www.computerhope.com/unix/aptitude.htm>;
