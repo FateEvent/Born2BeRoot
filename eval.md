@@ -4,7 +4,7 @@
 - [A bit of theory](#a-bit-of-theory)
 	- [Virtualization](#virtualization)
       - [How do Virtual Machines work?](#how-do-virtual-machines-work)
-      - [Advantages?](#advantages)
+      - [Advantages](#advantages)
       - [A snapshot](#a-snapshot)
     - [What is the difference between AppArmor and SELinux?](#what-is-the-difference-between-apparmor-and-selinux)
     - [What is the difference between Apt and Aptitude?](#what-is-the-difference-between-apt-and-aptitude)
