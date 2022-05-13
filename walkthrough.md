@@ -254,7 +254,17 @@ wget is a free and open source tool for downloading files directly from web repo
 
 ## STEP 6 - Configuring Cron Jobs
 
-All you need to do now, is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh, that I put in `/usr/local/bin/`.
+All you need to do now, is to configure the script which will show up on all of your terminal windows every ten minutes, the monitoring.sh, that I put in `/usr/local/bin/`. It's important to place it in a folder which will be accessible by every user, since Cron will try to run it (since we will ask it to) no matter which user has logged in.
+
+Why, then, in the /usr/local/bin/ path folder?
+/usr was the default conventional location for users' home directories before 1988, when segregating home directories was considered a good management policy. Also, files in the /usr/ path were files that didn't need to be available until the system was booted up far enough to support normal interactive use.
+Files under /usr/local are supposed to be particular to that single system. Files that are in any way generic should live elsewhere.
+/bin, short for "binary," in this context means "a file that is not plain text." Most such files are executables on a Unix box, so these two terms have become synonymous in some circles. (From Warren Young, <https://unix.stackexchange.com/questions/4186/what-is-usr-local-bin>)
+
+The monitoring.sh is a shell script, 
+
+	[a] shell script is a computer program designed to be run by the Unix shell, a command-line interpreter.[1] The various dialects of shell scripts are considered to be scripting languages. Typical operations performed by shell scripts include file manipulation, program execution, and printing text. A script which sets up the environment, runs the program, and does any necessary cleanup or logging, is called a wrapper. (From <https://en.wikipedia.org/wiki/Shell_script>)
+
 To find some of the information you need, it is necessary for you to install net-tools.
 
 	$ sudo apt install net-tools
@@ -266,29 +276,40 @@ To add the rule allowing the script to execute without sudo password, open the s
 
 and add the following line under the line starting with `%sudo`:
 
-	your_username ALL=(root) NOPASSWD: /path/to/monitoring.sh
+	your_username ALL=(root) NOPASSWD: /usr/local/bin/monitoring.sh
 
 You need to configure Cron as root by executing the following line:
 
 	sudo crontab -u root -e
 
+What's the difference between `crontab -e` and `sudo crontab -e`?
+  	
+	The difference is that with `sudo crontab -e` the commands are scheduled with root user's credentials. So that the commands in the sudo's cron table are executed as root user.
+	With` crontab -e`, the commands are scheduled with the regular user who is logged in.
+
+Where should I put my cron command, should it be in sudo or without the sudo?
+
+	Well, the answer to this depends on the type of command you want to run. If the command required sudo access then sudo crontab -e should be used. Else if the cron command doesn't require any special permission then use crontab -e. (From Santosh A, <https://stackoverflow.com/questions/43237488/linux-difference-between-sudo-crontab-e-and-just-crontab-e>)
+
 To schedule a shell script to run every 10 minutes, add the following line at the end of the file:
 
-	*/10 * * * * /path/to/monitoring.sh
+	*/10 * * * * /usr/local/bin/monitoring.sh
 
 Note: you can add the `wall` command to the cron, as in the following example, or directly on the script, as I did:
 
-	*/10 * * * * /path/to/monitoring.sh | wall
+	*/10 * * * * /usr/local/bin/monitoring.sh | wall
 
 You may check root's scheduled cron jobs with the following line:
 
 	$ sudo crontab -u root -l
 
+Consult my monitoring.sh if you're curious about how you may implement it, I recommend, anyway, to try to do it on your own.
+
 ## Step 7 - Installing Lighttpd, MariaDB, PHP and WordPress
 
 ### Substep 7.1 - Installing Lighttpd
 
-	$ sudo apt install lighttpd
+	$ sudo apt install lighttpd -y
 
 To verify whether lighttpd has been successfully installed:
 
@@ -302,7 +323,7 @@ Now let's allow incoming connections using Port 80:
 
 To install mariadb-server:
 
-	$ sudo apt install mariadb-server
+	$ sudo apt install mariadb-server -y
 
 To verify whether mariadb-server has been successfully installed:
 
@@ -363,22 +384,27 @@ Exit the MariaDB shell via `exit`.
 
 ### Substep 7.3: Installing PHP
 
-	$ sudo apt install php-cgi php-mysql
+	$ sudo apt install php-cgi php-mysql -y
 	$ dpkg -l | grep php
 
 To download WordPress to /var/www/html:
 
 	$ sudo wget http://wordpress.org/latest.tar.gz -P /var/www/html
 
-To extract downloaded content:
+To extract the downloaded content you have to navigate to the folder where you download it, to the /var/www/html/ folder, or once you'll have extracted it, it will appear in your current position.
 
+	$ cd /var/www/html/
 	$ sudo tar -xzvf /var/www/html/latest.tar.gz
 
-Remove tarball:
+Remove the tarball:
 
-$ sudo rm /var/www/html/latest.tar.gz
+	$ sudo rm /var/www/html/latest.tar.gz
 
 Copy content of /var/www/html/wordpress to /var/www/html:
+
+	$ sudo cp -r wordpress/* ./
+
+or
 
 	$ sudo cp -r /var/www/html/wordpress/* /var/www/html
 
@@ -414,12 +440,16 @@ Enable lighttpd modules as follows:
 	$ sudo lighty-enable-mod fastcgi-php
 	$ sudo service lighttpd force-reload
 
-Remember that the official documentation is always the most reliable source of information.
-Personally, I followed the following tutorial pages and everything works just fine (I installed Apache2 at first, and only later lighttpd)!
+Personally, I found it useful to follow the tutorial pages for the installation and configuration of an Apache2 server at first, and only later for a lighttpd server)!
 
-* <https://www.it-connect.fr/installer-un-serveur-lamp-linux-apache-mariadb-php-sous-debian-11>
-* <https://www.it-connect.fr/installation-de-wordpress-sous-linux/>
-* <https://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfiguration>
+* <https://www.it-connect.fr/installer-un-serveur-lamp-linux-apache-mariadb-php-sous-debian-11>,
+* <https://www.it-connect.fr/installation-de-wordpress-sous-linux/>.
+
+Remember that the official documentation is always the most reliable source of information.
+You may find complementary material on the Lighttpd official website and on the official Ubuntu French community documentation:
+
+* <https://redmine.lighttpd.net/projects/lighttpd/wiki/TutorialConfiguration>,
+* <https://doc.ubuntu-fr.org/lighttpd>.
 
 ## Step 8 - Installing and configuring Icecast
 

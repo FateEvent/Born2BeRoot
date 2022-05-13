@@ -66,13 +66,15 @@ SSH uses three techniques to encrypt:
 
 ### How to implement UFW with SSH
 
-UFW (Uncomplicated Firewall) is a software application responsible for ensuring that the system administrator can manage iptables in a simple way. Since it is very difficult to work with iptables, UFW provides us with an interface to modify the firewall of our device (netfilter) without compromising security. Once we have UFW installed, we can choose which ports we want to open for connections and which ones we want to close. This will also be very useful with SSH, greatly improving all the security related to communications between devices.
+UFW (Uncomplicated Firewall) is a software application allowing the system administrator to manage iptables in a simple way. Since it is very difficult to work with iptables, UFW provides us with an interface enabling us to modify the firewall of our device (netfilter) without compromising security. Once we have UFW installed, we can choose which ports we want to open for connections and which ones we want to close. This will also be very useful with SSH, greatly improving all the security related to communications between devices.
+
+iptables is a command line utility for configuring Linux kernel firewall implemented within the Netfilter project. The term is also commonly used to refer to this kernel-level firewall. (From: <https://wiki.archlinux.org/title/iptables>)
 
 ### Cron, wall and the useless thing
 
 #### What's Cron?
 
-Cron is a Linux task manager allowing us to execute commands at a certain time. We can automate some tasks just by telling cron what command we want to run at a specific time. For example, if we want to restart our server every day at 4:00 am, instead of having to wake up at that time, cron will do it for us.
+Cron is a Linux task manager running in the background, allowing us to execute commands at a certain time. We can automate some tasks just by telling cron what command we want to run at a specific time. For example, if we want to restart our server every day at 4:00 am, instead of having to wake up at that time, cron will do it for us.
 
 #### The wall command
 
