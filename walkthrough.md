@@ -120,7 +120,7 @@ Now we are going to install the necessary softwares and configure them.
 
 ### Substep 3.1 - Installing sudo and adding user in groups
 
-For information about the sudo command, see eval.md.
+For information about the sudo command, see [eval.md](https://github.com/FateEvent/Born2BeRoot/blob/main/eval.md).
 
 1) `su -` -> insert the root password.
 2) `$ adduser <your_username> sudo` (yep, you should be in root)
@@ -509,7 +509,7 @@ Remember to take a snapshot of your machine to use during the evaluation, so tha
 
 !IMPORTANT: Don't forget to make a snapshot of your VM (actually a simple copy-paste action on the .vdi file may be sufficient) before the evaluation starts!
 
-Now all you need to do is to prepare for the evaluation. You may find some information in my eval.md file.
+Now all you need to do is to prepare for the evaluation. You may find some information in my [eval.md](https://github.com/FateEvent/Born2BeRoot/blob/main/eval.md) file.
 
 #### Useful commands:
 * `$ apt-get update -y` & `$ apt-get upgrade -y` to update all the softwares installed in your virtual machine;
